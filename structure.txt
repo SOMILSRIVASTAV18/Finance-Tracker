@@ -1,0 +1,52 @@
+FINANCE
+│   app.py
+│   config.py
+│   img.jpeg
+│   requirements.txt
+│   structure.txt
+│
+├───exports
+│   ├───csv
+│   └───pdf
+├───forms
+│   │   auth_forms.py
+│   │   expense_forms.py
+│   │   profile_forms.py
+│   │   report_forms.py
+│   │   __init__.py
+│
+├───models
+│   │   category.py
+│   │   expense.py
+│   │   user.py
+│   │   __init__.py
+│   │
+│   
+├───static
+│   ├───css
+│   │       style.css
+│   │
+│   ├───img
+│   ├───js
+│   │       charts.js
+│   │       main.js
+│   │
+│   └───temp
+│           pie_2.png
+│           trend_2.png
+│
+├───templates
+│       base.html
+│       dashboard.html
+│       expenses.html
+│       index.html
+│       login.html
+│       profile.html
+│       register.html
+│       reports.html
+│
+└───utils
+    │   auth.py
+    │   charts.py
+    │   export.py
+    │   init.py

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Personal Finance Tracker{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white text-center">
+                    <h4 class="mb-0">Login</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('login') }}">
+                        {{ form.hidden_tag() }}
+
+                        <!-- Email Field -->
+                        <div class="form-group mb-3">
+                            <label for="email">Email Address</label>
+                            {{ form.email(class="form-control", placeholder="Enter your email") }}
+                            {% for error in form.email.errors %}
+                                <div class="text-danger"><small>{{ error }}</small></div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Password Field -->
+                        <div class="form-group mb-3">
+                            <label for="password">Password</label>
+                            {{ form.password(class="form-control", placeholder="Enter your password") }}
+                            {% for error in form.password.errors %}
+                                <div class="text-danger"><small>{{ error }}</small></div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Remember Me -->
+                        <div class="form-check mb-3">
+                            {{ form.remember(class="form-check-input") }}
+                            <label class="form-check-label" for="remember">Remember me</label>
+                        </div>
+
+                        <!-- Submit -->
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Login</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card-footer text-center">
+                    <p class="mb-1">Don't have an account? 
+                        <a href="{{ url_for('register') }}">Register</a>
+                    </p>
+                    <p class="mb-0">
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Reports - Personal Finance Tracker{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <h2 class="mb-3">Financial Reports</h2>
+    <p class="text-muted">
+        Generate detailed reports of your financial activity and export them.
+    </p>
+
+    <form method="POST">
+        {{ form.hidden_tag() }}
+
+        <div class="mb-3">
+            {{ form.report_type.label(class="form-label") }}
+            {{ form.report_type(class="form-select", id="report_type") }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.start_date.label(class="form-label") }}
+            {{ form.start_date(class="form-control", type="date") }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.end_date.label(class="form-label") }}
+            {{ form.end_date(class="form-control", type="date") }}
+        </div>
+
+        <div class="mb-3" id="categories_group">
+            {{ form.categories.label(class="form-label") }}
+            {{ form.categories(class="form-select", multiple=True, id="categories") }}
+            <small class="text-muted">Hold Ctrl / Cmd to select multiple</small>
+        </div>
+
+        <div class="form-check mb-3" id="include_charts_group">
+            {{ form.include_charts(class="form-check-input") }}
+            {{ form.include_charts.label(class="form-check-label") }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.export_format.label(class="form-label") }}
+            {{ form.export_format(class="form-select") }}
+        </div>
+
+        {{ form.submit(class="btn btn-primary") }}
+    </form>
+
+    <hr class="my-4">
+
+    <h4>Report Preview</h4>
+    
+    {% if report_data %}
+        <p>
+            <strong>Period:</strong>
+            {{ report_data.start_date }} to {{ report_data.end_date }}
+        </p>
+
+        <ul>
+            <li><strong>Total Income:</strong> ₹{{ report_data.total_income }}</li>
+            <li><strong>Total Expenses:</strong> ₹{{ report_data.total_expenses }}</li>
+            <li><strong>Net:</strong> ₹{{ report_data.total_income - report_data.total_expenses }}</li>
+        </ul>
+        
+
+    {% else %}
+        <p class="text-muted">
+            No report data available. Generate a report using the form above.
+        </p>
+    {% endif %}
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    function toggleFields() {
+        const type = document.getElementById("report_type").value;
+        const charts = document.getElementById("include_charts_group");
+
+        if (type === "transactions") {
+            charts.style.display = "none";
+        } else {
+            charts.style.display = "block";
+        }
+    }
+
+    document.getElementById("report_type").addEventListener("change", toggleFields);
+    toggleFields();
+});
+</script>
+{% endblock %}

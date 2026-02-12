@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Personal Finance Tracker{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.css">
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <!-- Welcome -->
+    <div class="mb-4">
+        <h2>Welcome, {{ current_user.username }}!</h2>
+        <small>Last login: {{ current_user.last_login.strftime('%Y-%m-%d %H:%M') if current_user.last_login else 'First login' }}</small>
+    </div>
+
+    <!-- Financial Summary -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h5>Total Income</h5>
+
+                    <h3>₹{{ total_income|format_currency }}</h3>
+
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h5>Total Expenses</h5>
+
+                    <h3>₹{{ total_expenses|format_currency }}</h3>
+
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h5>Balance</h5>
+                    <h3>₹{{ (total_income - total_expenses)|format_currency }}</h3>
+
+                    {% if total_income > total_expenses %}
+                        <span class="text-success">Positive Balance</span>
+                    {% else %}
+                        <span class="text-danger">Negative Balance</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Expense Breakdown -->
+    <div class="mb-5">
+        <h4>Expense Distribution by Category</h4>
+        <canvas id="expenseChart" width="400" height="300"></canvas>
+    </div>
+
+    <!-- Monthly Trend -->
+    <div class="mb-5">
+        <h4>Monthly Income vs Expenses</h4>
+        <canvas id="trendChart" width="400" height="200"></canvas>
+    </div>
+
+    <!-- Reports Section -->
+    <div class="mb-5">
+        <h4>Reports</h4>
+        <a href="{{ url_for('reports') }}" class="btn btn-primary">View Detailed Reports</a>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+<script>
+    // Expense breakdown chart
+    const expenseCtx = document.getElementById('expenseChart').getContext('2d');
+    const expenseChart = new Chart(expenseCtx, {
+        type: 'pie',
+        data: {{ expense_chart_data|safe }},
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'right' },
+                title: {
+                    display: true,
+                    text: 'Expense Distribution by Category'
+                }
+            }
+        }
+    });
+
+    // Monthly trend chart
+    const trendCtx = document.getElementById('trendChart').getContext('2d');
+    const trendChart = new Chart(trendCtx, {
+        type: 'line',
+        data: {{ trend_chart_data|safe }},
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                title: {
+                    display: true,
+                    text: 'Monthly Income vs Expenses'
+                }
+            },
+            scales: { y: { beginAtZero: true } }
+        }
+    });
+</script>
+{% endblock %}
